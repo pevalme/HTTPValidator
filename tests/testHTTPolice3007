@@ -1,0 +1,7 @@
+HTTP/1.1 304 NOT MODIFIED
+Server: nginx
+Date: Tue, 02 Aug 2016 10:48:50 GMT
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+

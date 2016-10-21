@@ -1,0 +1,8 @@
+POST /1/notification/list HTTP/1.1
+Host: www.futmondo.com
+Connection: keep-alive
+Content-Length: 47
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36
+Content-Type: application/json
+
+{"header":{},"query":{"count":100},"answer":{}}

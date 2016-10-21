@@ -1,0 +1,13 @@
+HTTP/1.1 404 NOT FOUND
+Server: nginx
+Date: Tue, 02 Aug 2016 10:19:44 GMT
+Content-Type: text/html
+Content-Length: 233
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.</p>

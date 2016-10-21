@@ -1,0 +1,11 @@
+GET /tag/js/gpt.js HTTP/1.1
+Host: www.googletagservices.com
+Connection: keep-alive
+Accept: */*
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36
+Referer: http://www.cuantarazon.com/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: es-ES,es;q=0.8,en;q=0.6
+Resource-Freshness: max-age=900,stale-while-revalidate=3600,age=3346
+If-Modified-Since: Tue, 22 Mar 2016 19:50:31 GMT
+

@@ -1,0 +1,10 @@
+GET / HTTP/1.1
+Host: 9gag.com
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: es-ES,es;q=0.8,en;q=0.6
+Cookie: sign_up_referer=; fbm_111569915535689=base_domain=.9gag.com; ts1=9f958ee85ae975cc6ba72e1c18d6302e5d3a5600; auto_log=%7B%22lo%22%3Afalse%2C%22d%22%3Afalse%2C%22a%22%3Atrue%2C%22dl%22%3Afalse%7D; safemode=0; _pk_id.11.f7ab=0ad9b761cae8fd22.1454286205.1.1454286206.1454286205.; ____ri=5655; gag_tz=1; _ga=GA1.2.409236649.1444144968; _pk_ref.7.f7ab=%5B%22%22%2C%22%22%2C1457562495%2C%22https%3A%2F%2Fwww.facebook.com%2F%22%5D; _pk_id.7.f7ab=1dee187cff10139e.1444144969.592.1457562542.1457562495.
+

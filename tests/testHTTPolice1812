@@ -1,0 +1,35 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Tue, 02 Aug 2016 10:21:05 GMT
+Content-Type: application/json
+Content-Length: 736
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+
+{
+  "args": {}, 
+  "data": "", 
+  "files": {}, 
+  "form": {
+    "comments": "", 
+    "custemail": "", 
+    "custname": "qerfqer", 
+    "custtel": "ff134r1", 
+    "delivery": "", 
+    "size": "large"
+  }, 
+  "headers": {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", 
+    "Accept-Encoding": "gzip, deflate", 
+    "Accept-Language": "en-US,en;q=0.5", 
+    "Content-Length": "74", 
+    "Content-Type": "application/x-www-form-urlencoded", 
+    "Host": "httpbin.org", 
+    "Referer": "http://httpbin.org/forms/post", 
+    "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+  }, 
+  "json": null, 
+  "origin": "95.84.210.114", 
+  "url": "http://httpbin.org/post"
+}

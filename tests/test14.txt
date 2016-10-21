@@ -1,0 +1,5 @@
+GET /photo/a4LgGwp_460s.jpg HTTP/1.1
+Host: img-9gag-fun.9cache.com
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 
+
