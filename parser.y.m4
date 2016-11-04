@@ -78,10 +78,14 @@ define(`spellit',`patsubst(`$1', `\S', QUOTE`'\&`'QUOTE )')
 %token SPACE
 %token CHAR
 
-
+%token INPUT_STREAM
+%token OUTPUT_STREAM
 %%
 
-axiom: status_line | request_line {YYACCEPT;}
+
+axiom: status_line | request_line | combined
+
+combined: INPUT_STREAM request_line OUTPUT_STREAM status_line
 
 status_line: HTTP VERSION SPACE STATUS_CODE SPACE STATUS_PHRASE HTTP_NEWLINE headers_response
 request_line: METHOD SPACE request-uri SPACE HTTP VERSION HTTP_NEWLINE headers_request

@@ -131,6 +131,9 @@
 <BODY,INITIAL>"9" { ECHO; return '9'; }
 <BODY,INITIAL>"0" { ECHO; return '0'; }
 
+<BODY,INITIAL>.*"\r\n\r\n======== BEGIN INBOUND STREAM ========\r\n" { ECHO; return INPUT_STREAM; }
+<BODY,INITIAL>"======== BEGIN OUTBOUND STREAM ========\r\n" { BEGIN(INITIAL); ECHO; return OUTPUT_STREAM; }
+
 <HEADER>"\r\n" { BEGIN(BODY); ECHO; return HTTP_NEWLINE; }
 "\r\n" { BEGIN(HEADER); ECHO; return HTTP_NEWLINE; }
 
@@ -138,7 +141,7 @@
 <BODY,INITIAL>"\n" { ECHO; return NEW_LINE; }
 <BODY,INITIAL>" " { ECHO; return SPACE;}
 
-<BODY,INITIAL>. { return CHAR; }
+<BODY,INITIAL>. { ECHO; return CHAR; }
 %%
 
 //void read_msg() {BEGIN(MSG);}

@@ -42,7 +42,7 @@ for i in $TESTS; do
 	error=0
 	while read line
 	do
-	  if [ "$line" == "Wrong message." ]; then
+	  if [[ "$line" == *"Wrong message."* ]]; then
 	  	echo -e "HTTP message contained in \e[3m"$i"\e[0m is\e[1m NOT correct.\e[0m"
 	  	error=1
 	  	if [[ -s $AUX ]]; then

@@ -11,6 +11,7 @@ SUB_PARSERS_FOLDER="sub_parsers"
 REPEATED_FIELDS=$SUB_PARSERS_FOLDER/"duplicate_fields"
 CHUNKED=$SUB_PARSERS_FOLDER/"chunked"
 OTHERS=$SUB_PARSERS_FOLDER/"others"
+COMBINED=$SUB_PARSERS_FOLDER/"combined"
 
 PARSER="parser"
 PARSER_CHUNK="parserChunk"
@@ -40,7 +41,14 @@ echo "Checking for a variety of possible many errors..."
 ./$OTHERS $1
 if [ $? -ne 0 ]
   then
-  echo "Wrong message."
+  echo "Wrong message. Some semantic error occur."
+  exit
+fi
+
+./$COMBINED $1
+if [ $? -ne 0 ]
+  then
+  echo "Wrong message. Some semantic error occur."
   exit
 fi
 
