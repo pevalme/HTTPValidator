@@ -2,6 +2,8 @@
 
 This is a *safe* HTTP validator implemented with Flex and Bison. Here, safety means no semantic action is used so the parsing is done entirely by bison's automatically generated code, avoiding the frequent vulnerabilities associated with handwritten code.
 
+HTTPValidator stands as a proof of concept of our results on input validation, available in [this paper][Paper]. 
+
 ## Requirements
 * m4 version 1.4.17 (at least)
 * flex
@@ -24,4 +26,5 @@ To validate a list of messages and compare with [HTTPolice][HTTPolice]:
 HTTPValidator also validates pairs of messages request-response when they are provided in *combined format* of [HTTPolice][HTTPolice].
 
 [HTTPolice]: https://github.com/vfaronov/httpolice/
+[Paper]: https://arxiv.org/abs/1610.07198
 
