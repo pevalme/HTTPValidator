@@ -17,6 +17,8 @@ define(`spellit',`patsubst(`$1', `\S', QUOTE`'\&`'QUOTE )')
     extern  FILE *yyin;
 %}
 
+%glr-parser
+
 %token ALLOW
 %token CONNECTION
 %token CONTENT_ENCODING
@@ -58,6 +60,7 @@ define(`spellit',`patsubst(`$1', `\S', QUOTE`'\&`'QUOTE )')
 %token TE
 %token UPGRADE_INSECURE_REQUESTS
 %token USER_AGENT
+%token ALT_SVC
 
 %token GENERIC_FIELD
 
@@ -266,7 +269,7 @@ headers_request: ALLOW SPACE token_comma HTTP_NEWLINE headers_request
         | UPGRADE_INSECURE_REQUESTS SPACE value_upgrade HTTP_NEWLINE headers_request
         | USER_AGENT SPACE product_or_comma_star HTTP_NEWLINE headers_request
         | GENERIC_FIELD SPACE NOTCRCL_STAR HTTP_NEWLINE headers_request
-        | HTTP_NEWLINE general_body
+        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg', ifdef(`CHUNKED_REQ', `chunked_msg', general_body))
 
 headers_request_CL: ALLOW SPACE token_comma HTTP_NEWLINE headers_request_CL
         | CONNECTION SPACE token HTTP_NEWLINE headers_request_CL
@@ -310,7 +313,7 @@ headers_request_CL: ALLOW SPACE token_comma HTTP_NEWLINE headers_request_CL
         | UPGRADE_INSECURE_REQUESTS SPACE value_upgrade HTTP_NEWLINE headers_request_CL
         | USER_AGENT SPACE product_or_comma_star HTTP_NEWLINE headers_request_CL
         | GENERIC_FIELD SPACE NOTCRCL_STAR HTTP_NEWLINE headers_request_CL
-        | HTTP_NEWLINE
+        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg', ifdef(`CHUNKED_REQ', `chunked_msg'))
 
 /* ACCEPT-LANGUAGE */
 accept_language_value: language_range
@@ -381,7 +384,7 @@ entity_tag_or_star: '*'
                   | entity_tag_comma
 
 entity_tag_comma: entity_tag
-                | entity_tag ',' entity_tag_comma
+                | entity_tag ',' SPACES entity_tag_comma
 
 /* HOST */
 host_name: host ':' port
@@ -593,8 +596,9 @@ headers_response:  ALLOW SPACE token_comma HTTP_NEWLINE headers_response
         | SERVER SPACE product_or_comma_star HTTP_NEWLINE headers_response
         | VARY SPACE vary_value HTTP_NEWLINE headers_response
         | WWW_AUTHENTICATE SPACE challenges_comma HTTP_NEWLINE headers_response
+        | ALT_SVC SPACE alt_svc_data HTTP_NEWLINE headers_response
         | GENERIC_FIELD SPACE NOTCRCL_STAR HTTP_NEWLINE headers_response
-        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg', general_body)
+        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg', ifdef(`CHUNKED_RESP', `chunked_msg', general_body))
 
 headers_response_CL:  ALLOW SPACE token_comma HTTP_NEWLINE headers_response_CL
         | CONNECTION SPACE token HTTP_NEWLINE headers_response_CL
@@ -626,20 +630,44 @@ headers_response_CL:  ALLOW SPACE token_comma HTTP_NEWLINE headers_response_CL
         | SERVER SPACE product_or_comma_star HTTP_NEWLINE headers_response_CL
         | VARY SPACE vary_value HTTP_NEWLINE headers_response_CL
         | WWW_AUTHENTICATE SPACE challenges_comma HTTP_NEWLINE headers_response_CL
+        | ALT_SVC SPACE alt_svc_data HTTP_NEWLINE headers_response_CL
         | GENERIC_FIELD SPACE NOTCRCL_STAR HTTP_NEWLINE headers_response_CL
-        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg')
+        | HTTP_NEWLINE ifdef(`CHUNKED',` chunked_msg', ifdef(`CHUNKED_RESP', `chunked_msg'))
+
+/* Alternative Services */
+alt_svc_data: spellit(CLEAR) | alt_values
+
+alt_values: alternative parameters_space alt_value_star
+
+alt_value_star: ',' SPACES alt_values
+              | /*empty*/
+
+alternative: token '=' '"' host ':' port '"'
+           | token '=' '"' ':' port '"'
+
+parameters_space: SPACES ';' SPACES parameter_alt parameters_space
+                | /*empty*/
+
+parameter_alt: spellit(MA) SPACES '=' SPACES delta_seconds
+             | spellit(PERSIST) SPACES '=' SPACES '1'
+             | spellit(MA) SPACES '=' SPACES '"' delta_seconds '"'
+             | spellit(PERSIST) SPACES '=' SPACES '"' '1' '"'
 
 /* General BODY */
-general_body: MCHAR general_body | /*empty*/
+ifdef(`CHUNKED', ,general_body: MCHAR general_body | /*empty*/)
 
 /* WWW-AUTHENTICATE */
-challenge: token spaces auth_param
+challenge: token spaces auth_params
+         | token
 
 challenges_comma: challenge
-                | challenge ',' challenges_comma
+                | challenge ',' SPACES challenges_comma
 
 spaces: SPACE spaces
       | SPACE
+
+auth_params: auth_param
+           | auth_param ',' SPACES auth_params
 
 auth_param: token '=' token_or_quoted_string
 
@@ -746,12 +774,12 @@ range_units_comma_star: token
 warning_value: warning_val
              | warning_val ',' warning_value
 
-warning_val: warn_code SPACE warn_agent SPACE warn_text
-           | warn_code SPACE warn_agent SPACE warn_text SPACE warn_date
+warning_val: warn_code SPACES warn_agent SPACES warn_text
+           | warn_code SPACES warn_agent SPACES warn_text SPACES warn_date
 
 
 warn_code: digit digit digit
-warn_agent: token
+warn_agent: token | token ':' port
 warn_text: quoted_string
 warn_date: '"' http_date '"'
 
@@ -781,8 +809,8 @@ delta_seconds: digit
              | delta_seconds digit
 
 /* VIA */
-via_data: received_protocol SPACE received_by ','
-        | received_protocol SPACE received_by comment ','
+via_data: received_protocol SPACE received_by 
+        | received_protocol SPACE received_by comment
         | received_protocol SPACE received_by ',' via_data
         | received_protocol SPACE received_by comment ',' via_data
 
@@ -871,7 +899,7 @@ content_codings: token
 
 /* ALLOW */
 token_comma: token
-           | token ',' token_comma
+           | token ',' SPACES token_comma
 
 /* CONTENT-LANGUAGE */
 content_languages: language_tag
@@ -1034,10 +1062,9 @@ define(`allLengths', `X$1_$2 | ifelse(eval($1 > 2),1, `allLengths(decr($1),$2)',
 length_request: allLengths(MAX,request)
 length_response: allLengths(MAX,response)
 
-ifdef(`CHUNKED',
+ifdef(`CHUNK',
 dnl Chunked message
 define(`hexadecimal', `ifelse($1,15,`F',$1,14,`E',$1,13,`D',$1,12,`C',$1,11,`B',$1,10,`A',$1)')dnl
-
 
 dnl Auxiliary def = innermost loop
 define(`Xcountdown', `QUOTE`'hexadecimal($1)`'QUOTE X`'decr($2)_$3 copy($1, G`'$2)

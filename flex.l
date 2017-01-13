@@ -5,8 +5,8 @@
 
 #include "bison.tab.h"
 
-#undef ECHO
-#define ECHO {}
+//#undef ECHO
+//#define ECHO {}
 %}
 
 %option noyywrap
@@ -66,6 +66,7 @@
 <HEADER>(?i:server:) { BEGIN(INITIAL); ECHO; return SERVER; }
 <HEADER>(?i:vary:) { BEGIN(INITIAL); ECHO; return VARY; }
 <HEADER>(?i:www-authenticate:) { BEGIN(INITIAL); ECHO; return WWW_AUTHENTICATE; }
+<HEADER>(?i:alt-svc:) { BEGIN(INITIAL); ECHO; return ALT_SVC; }
 <HEADER>("!"|"#"|"$"|"%"|"&"|"'"|"*"|"+"|"-"|"."|"^"|"_"|"`"|"|"|"~"|[0-9]|[a-zA-Z])+":" { BEGIN(INITIAL); ECHO; return GENERIC_FIELD; }
 
 <BODY,INITIAL>(?i:q) { ECHO; return 'Q'; }

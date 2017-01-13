@@ -9,14 +9,15 @@
 
 
 %%
-(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n" { exit(-1);}
 
-"\n" {}
+.*"\r\n\r\n======== BEGIN INBOUND STREAM ========\r\n"(.+"\r\n")*(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n" { exit(1);}
+.*"\r\n\r\n======== BEGIN INBOUND STREAM ========\r\n"(.+"\r\n")*(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n"(.+"\r\n")*"\r\n======== BEGIN OUTBOUND STREAM ========\r\n"(.+"\r\n")*(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n" { exit(2);}
+"======== BEGIN OUTBOUND STREAM ========\r\n"(.+"\r\n")*(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n" { exit(3);}
+(?i:Transfer-encoding:)(" ")*.*(?i:Chunked).*"\r\n" { exit(4);}
+
 "\r" {}
-"\r\n\r\n" {exit(0);}
+"\n" {}
 . {}
-
-
 %%
 
 int main(int argc, char *argv[]){

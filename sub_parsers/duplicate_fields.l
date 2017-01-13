@@ -6,6 +6,7 @@
 %}
 
 %option noyywrap
+%x IGNORE
 
 /* DATE */
 wkday ("Mon"|"Tue"|"Wed"|"Thu"|"Fri"|"Sat"|"Sun")
@@ -35,15 +36,27 @@ http_date3 ({wkday}" "{date3}" "{time}" "{four_digit})
 	exit(-1);
 }
 
+(?i:Last-modified:)(" ")*({http_date1}|{http_date2}|{http_date3})"\r\n"(.+"\r\n")*(?i:Last-modified:)(" ")*({http_date1}|{http_date2}|{http_date3}) {
+	exit(-1);
+}
+
+
 (?i:Expires:)(" ")*({http_date1}|{http_date2}|{http_date3})"\r\n"(.+"\r\n")*(?i:Expires:)(" ")*({http_date1}|{http_date2}|{http_date3}) {
 	exit(-1);
 }
 
+(?i:Referer:)(.*"\r\n")*(?i:Referer:) { exit(-1);}
+
 "\n" {}
 "\r" {}
-"\r\n\r\n" {exit(0);}
 . {}
 
+.*"\r\n\r\n======== BEGIN INBOUND STREAM ========\r\n" {}
+"\r\n\r\n" { BEGIN(IGNORE);}
+<IGNORE>"======== BEGIN OUTBOUND STREAM ========\r\n" { printf("reading response\n"); BEGIN(INITIAL);}
+<IGNORE>"\r" {}
+<IGNORE>"\n" {}
+<IGNORE>. {}
 
 %%
 

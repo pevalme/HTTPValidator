@@ -31,9 +31,12 @@ make
 
 for i in $TESTS; do
 	# echo -e "Working on test \e[1m"$i"\e[0m"
+	filename=$(basename $i)
 	firstLine=$(head -n 1 $i)
-	if [[ "$firstLine" == "HTTP"* ]]; then
-		eval "httpolice -s 1276 -s{$DEBUG_COMMENTS} -i resp-stream $i > $AUX"
+	if [[ "$filename" == "combined"* ]]; then
+		eval "httpolice -s 1276 -s{$DEBUG_COMMENTS} -i combined $i > $AUX"
+	elif [[ "$firstLine" == "HTTP"* ]]; then
+		eval "httpolice -s 1276 -s{$DEBUG_COMMENTS} -i resp-stream $i > $AUX" 
 	else
 		eval "httpolice -s 1276 -s{$DEBUG_COMMENTS} -i req-stream $i > $AUX"
 	fi
@@ -42,7 +45,7 @@ for i in $TESTS; do
 	error=0
 	while read line
 	do
-	  if [[ "$line" == *"Wrong message."* ]]; then
+	  if [ "$line" == "Wrong message." ]; then
 	  	echo -e "HTTP message contained in \e[3m"$i"\e[0m is\e[1m NOT correct.\e[0m"
 	  	error=1
 	  	if [[ -s $AUX ]]; then

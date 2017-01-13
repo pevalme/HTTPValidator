@@ -1,0 +1,20 @@
+1026 1138
+
+======== BEGIN INBOUND STREAM ========
+GET / HTTP/1.1
+Host: example.com
+User-Agent: demo
+Range: bytes=0-10
+
+======== BEGIN OUTBOUND STREAM ========
+HTTP/1.1 206 Partial Content
+Date: Thu, 31 Dec 2015 18:26:56 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Trailer: Content-Range
+
+b
+Hello world
+0
+Content-Range: bytes 0-10/14
+
