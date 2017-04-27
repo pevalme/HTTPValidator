@@ -54,7 +54,7 @@ At the current stage of development, no effort was invested in making the tool p
 Nonetheless, the parsing process consists of running multiple parsers one after the other. Since the parsers are independent from each other, they could, in principle, run in parallel. Besides, the parser so called [others][others] consists of many regular expressions, each of which detects a different error. These regular expression are independent and can be split in several files to be run in parallel.
 
 ## Errors detected
-The following table contains all the errors detected by HTTPolice (as noted [here][HTTPNotices]) classified according to if they are already implemented and detected by HTTP Validator, they can be implemented but are not so yet or they are out of the scope of HTTPolice.
+The following table contains all the errors detected by HTTPolice (as noted [here][HTTPNotices]) classified according to whether they are already implemented and detected by HTTPValidator, they can be implemented but are not so yet or they are out of the scope of HTTValidator.
 
 |  Implemented  | Not implemented  | Out of scope  |
 |---|---|---|

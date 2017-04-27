@@ -14,7 +14,7 @@ dnl    You should have received a copy of the GNU General Public License
 dnl    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 dnl Maximum allowed content length size
-define(`MAX', 10)dnl
+define(`MAX', 80)dnl
 dnl useful marco e.g. md5
 define(`copy', `$2 ifelse(eval($1 > 1),1, `copy(decr($1),$2)')')dnl
 dnl Auxiliary definition to handle quotes
